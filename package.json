@@ -1,0 +1,47 @@
+{
+  "name": "latam-atlas",
+  "version": "0.0.1",
+  "description": "Pre-built TopoJSON from Latin America",
+  "license": "MIT",
+  "keywords": [
+    "topojson",
+    "geojson",
+    "shapefile",
+    "latin",
+    "Perú",
+    "Ecuador"
+  ],
+  "author": {
+    "name": "Carlos León",
+    "url": "https://github.com/ccalobeto/latam-atlas.git"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ccalobeto/latam-atlas.git"
+  },
+  "files": [
+    "*-50k.json"
+  ],
+  "scripts": {
+    "prepublishOnly": "bash prepublish",
+    "postpublish": "git push && git push --tags"
+  },
+  "devDependencies": {
+    "d3-dsv": "3.0.1",
+    "d3-geo-projection": "4.0.0",
+    "ndjson-cli": "0.3.1",
+    "shapefile": "0.6.6",
+    "topojson-client": "3.1.0",
+    "topojson-server": "3.0.1",
+    "topojson-simplify": "3.0.3"
+  },
+  "dependencies": {
+    "@json2csv/cli": "7.0.3",
+    "mapshaper": "0.6.42"
+  },
+  "type": "module",
+  "exports": "./properties.js",
+  "engines": {
+    "node": ">=16"
+  }
+}

@@ -1,0 +1,9 @@
+build/
+test/
+img/
+data/
+prepublish
+*.js
+*-lock.json
+*.lock
+*.zip
