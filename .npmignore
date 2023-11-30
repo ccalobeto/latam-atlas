@@ -1,9 +1,4 @@
-build/
-test/
-img/
 data/
-prepublish
-*.js
-*-lock.json
-*.lock
-*.zip
+#*-lock.json
+#*.lock
+#*.zip
