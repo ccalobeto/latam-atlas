@@ -1,0 +1,64 @@
+#!/bin/bash
+
+rm -rvf files/*-50k.json
+mkdir -p build
+rm -r files
+mkdir -p build files
+
+# Ecuador - download
+if [ ! -f build/nxparroquias.shp ]; then
+  curl -ko build/ecuador.zip 'https://www.ecuadorencifras.gob.ec//documentos/web-inec/Cartografia/Clasificador_Geografico/2012/SHP.zip'
+  unzip -od build build/ecuador.zip SHP/nxparroquias.shp SHP/nxparroquias.dbf 
+  for i in build/SHP/nxparroquias.*; do mv -- "$i" "${i/SHP\/nxparroquias/ecuador}"; done
+  rmdir build/SHP
+  chmod a-x build/ecuador.*
+fi
+
+# Ecuador - dictionary
+shp2json -n build/ecuador.shp \
+  | ndjson-map 'd.properties' \
+  | json2csv -n > build/dictionary.csv
+dictionary="$(iconv build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $2, $5, $6, $7, $8}' | awk '{gsub(/"/,"")};1')"
+echo "$dictionary" > build/dictionary.csv
+
+# Ecuador - topojson
+geo2topo -q 1e5 -n level4=<( \
+  mapshaper build/ecuador.shp -proj wgs84 from='+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs' -simplify 3% keep-shapes -clean -o \ format=geojson - \
+    | ndjson-cat \
+    | ndjson-split 'd.features' \
+    | ndjson-map '(d.id = d.properties.DPA_PARROQ, delete d.properties, d)') \
+  | topomerge level3=level4 -k 'd.id.slice(0, 4)' \
+  | topomerge level2=level3 -k 'd.id.slice(0, 2)' \
+  | topomerge level1=level2 \
+  | node ./properties.js \
+> files/ecuador-transverse_mercator-50k.json
+  
+# Perú - download
+if [ ! -f build/peru.shp ]; then
+  curl -L 'https://drive.google.com/uc?export=download&id=1f7NVikAoKK8xOC2nPk1Vys3e-pAI3WLJ&confirm=t' > build/peru.zip
+  unzip build/peru.zip -d build/peru 'Distrital INEI 2023 geogpsperu SuyoPomalia'.shp 'Distrital INEI 2023 geogpsperu SuyoPomalia'.dbf 
+  for i in build/peru/'Distrital INEI 2023 geogpsperu SuyoPomalia'.*; do mv -- "$i" "${i/peru\/'Distrital INEI 2023 geogpsperu SuyoPomalia'/peru}"; done
+  rm -rf build/peru
+  chmod a-x build/peru.*
+fi
+
+# Perú - dictionary
+shp2json -n build/peru.shp \
+  | ndjson-map 'd.properties' \
+  | json2csv -n > build/dictionary.csv
+dictionary="$(iconv -f ISO8859-1 -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $7, $3, $6, $2, $5}' | awk '{gsub(/"/,"")};1')"
+echo "$dictionary" > build/dictionary.csv
+
+# Perú - topojson 
+geo2topo -q 1e5 -n level4=<( \
+  mapshaper build/peru.shp -simplify 3% keep-shapes -clean -o \
+  format=geojson - \
+    | ndjson-cat \
+    | ndjson-split 'd.features' \
+    | ndjson-map '(d.id = d.properties.UBIGEO, delete d.properties, d)') \
+  | toposimplify -f -s 1e-7 \
+  | topomerge level3=level4 -k 'd.id.slice(0, 4)' \
+  | topomerge level2=level3 -k 'd.id.slice(0, 2)' \
+  | topomerge level1=level2 \
+  | node ./properties.js \
+> files/peru-100k.json
