@@ -1,6 +1,6 @@
 {
   "name": "latam-atlas",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Pre-built TopoJSON from Latin America",
   "license": "MIT",
   "keywords": [
@@ -20,7 +20,7 @@
     "url": "https://github.com/ccalobeto/latam-atlas.git"
   },
   "files": [
-    "*-50k.json"
+    "files"
   ],
   "scripts": {
     "prepublishOnly": "bash prepublish",
