@@ -68,9 +68,9 @@ To visualize with d3.js:
 
 ```
 d3
-    .geoMercator()
-    .scale(2000)
-    .translate([2900, 0])
+    .geoIdentity()
+    .reflectY(true)
+    .fitSize([width, height], features)
 ```
 
 Districts
