@@ -13,14 +13,14 @@ if [ ! -f build/nxparroquias.shp ]; then
   chmod a-x build/ecuador.*
 fi
 
-# Ecuador - dictionary
+# # Ecuador - dictionary
 shp2json -n build/ecuador.shp \
   | ndjson-map 'd.properties' \
   | json2csv -n > build/dictionary.csv
-dictionary="$(iconv build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $2, $5, $6, $7, $8}' | awk '{gsub(/"/,"")};1')"
+dictionary="$(iconv -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $2, $5, $6, $7, $8}' | awk '{gsub(/"/,"")};1')"
 echo "$dictionary" > build/dictionary.csv
 
-# Ecuador - topojson
+# # Ecuador - topojson
 geo2topo -q 1e5 -n level4=<( \
   mapshaper build/ecuador.shp -proj wgs84 from='+proj=utm +zone=17 +south +datum=WGS84 +units=m +no_defs' -simplify 3% keep-shapes -clean -o \ format=geojson - \
     | ndjson-cat \
@@ -34,7 +34,7 @@ geo2topo -q 1e5 -n level4=<( \
   
 # Perú - download
 if [ ! -f build/peru.shp ]; then
-  curl -L 'https://drive.google.com/uc?export=download&id=1f7NVikAoKK8xOC2nPk1Vys3e-pAI3WLJ&confirm=t' > build/peru.zip
+  curl -L 'https://drive.google.com/file/d/1f7NVikAoKK8xOC2nPk1Vys3e-pAI3WLJ/view' > build/peru.zip
   unzip build/peru.zip -d build/peru 'Distrital INEI 2023 geogpsperu SuyoPomalia'.shp 'Distrital INEI 2023 geogpsperu SuyoPomalia'.dbf 
   for i in build/peru/'Distrital INEI 2023 geogpsperu SuyoPomalia'.*; do mv -- "$i" "${i/peru\/'Distrital INEI 2023 geogpsperu SuyoPomalia'/peru}"; done
   rm -rf build/peru
@@ -42,10 +42,10 @@ if [ ! -f build/peru.shp ]; then
 fi
 
 # Perú - dictionary
-shp2json -n build/peru.shp \
+shp2json --encoding utf-8 -n build/peru.shp \
   | ndjson-map 'd.properties' \
   | json2csv -n > build/dictionary.csv
-dictionary="$(iconv -f ISO8859-1 -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $7, $2$3, $6, $2, $5}' | awk '{gsub(/"/,"")};1')"
+dictionary="$(iconv -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $7, $2$3, $6, $2, $5}' | awk '{gsub(/"/,"")};1')"
 echo "$dictionary" > build/dictionary.csv
 
 # Perú - topojson 
