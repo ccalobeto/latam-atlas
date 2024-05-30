@@ -1,6 +1,6 @@
 {
   "name": "latam-atlas",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Pre-built TopoJSON from Latin America",
   "license": "MIT",
   "keywords": [
