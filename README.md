@@ -43,7 +43,7 @@ For the level 3 the first four digits of the **id code** is the canton code.
 
 * Source: [Ecuador cartographic boundary shapefiles](https://www.ecuadorencifras.gob.ec/documentos/web-inec/Geografia_Estadistica/Micrositio_geoportal/index.html)
 * Projection: [https://epsg.io/32717](https://epsg.io/32717). 
-* [Download](https://cdn.jsdelivr.net/npm/latam-atlas@0.0.5/files/ecuador-transverse_mercator-50k.json "Source")
+* [Download](https://cdn.jsdelivr.net/npm/latam-atlas@0.1.0/files/ecuador-tm-50k.json "Source")
 
 To visualize with d3.js:
 
@@ -60,9 +60,9 @@ Parishes
 
 ### Perú
 
-* Source: [Perú cartographic boundary shapefiles](https://www.geogpsperu.com/2020/04/limite-distrital-politico-shapefile_28.html)
+* Source: [Perú cartographic boundary shapefiles](https://www.idep.gob.pe/)
 * Projection: [https://epsg.io/4326](https://epsg.io/4326). 
-* [Download](https://cdn.jsdelivr.net/npm/latam-atlas@0.0.5/files/peru-100k.json "Source")
+* [Download](https://cdn.jsdelivr.net/npm/latam-atlas@0.1.0/files/peru-100k.json "Source")
 
 To visualize with d3.js:
 
