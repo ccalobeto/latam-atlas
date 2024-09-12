@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rm -rvf files/*.json
+rm -rvf build/*
 mkdir -p build
 mkdir -p build files
 
@@ -30,14 +31,14 @@ geo2topo -q 1e5 -n level4=<( \
   | topomerge level2=level3 -k 'd.id.slice(0, 2)' \
   | topomerge level1=level2 \
   | node ./properties.js \
-> files/ecuador-transverse_mercator-50k.json
+> files/ecuador-tm-50k.json #transverse_mercator
   
 # Perú - download
 if [ ! -f build/peru.shp ]; then
-  curl -L 'https://drive.google.com/file/d/1f7NVikAoKK8xOC2nPk1Vys3e-pAI3WLJ/view' > build/peru.zip
-  unzip build/peru.zip -d build/peru 'Distrital INEI 2023 geogpsperu SuyoPomalia'.shp 'Distrital INEI 2023 geogpsperu SuyoPomalia'.dbf 
-  for i in build/peru/'Distrital INEI 2023 geogpsperu SuyoPomalia'.*; do mv -- "$i" "${i/peru\/'Distrital INEI 2023 geogpsperu SuyoPomalia'/peru}"; done
-  rm -rf build/peru
+  curl -ko build/peru.zip 'https://www.idep.gob.pe/descargas_CN/limites/distritos.zip'
+  unzip build/peru.zip -d build/distritos DISTRITOS.shp DISTRITOS.dbf 
+  for file in build/distritos/DISTRITOS.*; do mv -- "$file" "${file/distritos\/DISTRITOS/peru}"; done
+  rm -rf build/distritos
   chmod a-x build/peru.*
 fi
 
@@ -45,7 +46,7 @@ fi
 shp2json --encoding utf-8 -n build/peru.shp \
   | ndjson-map 'd.properties' \
   | json2csv -n > build/dictionary.csv
-dictionary="$(iconv -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $1, $7, $2$3, $6, $2, $5}' | awk '{gsub(/"/,"")};1')"
+dictionary="$(iconv -t UTF-8 build/dictionary.csv | awk -F "\"*,\"*" -v OFS=',' '{print $2, $8, $3$5, $6, $3, $4}' | awk '{gsub(/"/,"")};1')"
 echo "$dictionary" > build/dictionary.csv
 
 # Perú - topojson 

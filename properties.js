@@ -29,18 +29,24 @@ function output([topology, dictionary]) {
   const dlevel2 = new Map(dictionary.map(d => [d[keys[4]], d[keys[5]]]));
   for (const geometry of topology.objects.level4.geometries) {
     geometry.properties = {
-      name: dlevel4.get(geometry.id)
+      areacd: geometry.id,
+      areanm: dlevel4.get(geometry.id)
     };
+    delete geometry.id;
   }
   for (const geometry of topology.objects.level3.geometries) {
     geometry.properties = {
-      name: dlevel3.get(geometry.id)
+      areacd: geometry.id,
+      areanm: dlevel3.get(geometry.id)
     };
+    delete geometry.id;
   }
   for (const geometry of topology.objects.level2.geometries) {
     geometry.properties = {
-      name: dlevel2.get(geometry.id)
+      areacd: geometry.id,
+      areanm: dlevel2.get(geometry.id)
     };
+    delete geometry.id;
   }
   process.stdout.write(JSON.stringify(topology));
   process.stdout.write("\n");
