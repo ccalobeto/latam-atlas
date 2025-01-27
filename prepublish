@@ -14,7 +14,7 @@ if [ ! -f build/nxparroquias.shp ]; then
   chmod a-x build/ecuador.*
 fi
 
-# # Ecuador - dictionary
+# Ecuador - dictionary
 shp2json -n build/ecuador.shp \
   | ndjson-map 'd.properties' \
   | json2csv -n > build/dictionary.csv
