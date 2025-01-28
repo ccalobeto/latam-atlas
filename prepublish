@@ -1,18 +1,18 @@
 #!/bin/bash
 
-rm -rvf files/*.json
-rm -rvf build/*
-mkdir -p build
-mkdir -p build files
+# rm -rvf files/*.json
+# rm -rvf build/*
+# mkdir -p build
+# mkdir -p build files
 
 # Ecuador - download
-if [ ! -f build/nxparroquias.shp ]; then
-  curl -ko build/ecuador.zip 'https://www.ecuadorencifras.gob.ec//documentos/web-inec/Cartografia/Clasificador_Geografico/2012/SHP.zip'
-  unzip -od build build/ecuador.zip SHP/nxparroquias.shp SHP/nxparroquias.dbf 
-  for i in build/SHP/nxparroquias.*; do mv -- "$i" "${i/SHP\/nxparroquias/ecuador}"; done
-  rmdir build/SHP
-  chmod a-x build/ecuador.*
-fi
+# if [ ! -f build/nxparroquias.shp ]; then
+#   curl -ko build/ecuador.zip 'https://www.ecuadorencifras.gob.ec//documentos/web-inec/Cartografia/Clasificador_Geografico/2012/SHP.zip'
+#   unzip -od build build/ecuador.zip SHP/nxparroquias.shp SHP/nxparroquias.dbf 
+#   for i in build/SHP/nxparroquias.*; do mv -- "$i" "${i/SHP\/nxparroquias/ecuador}"; done
+#   rmdir build/SHP
+#   chmod a-x build/ecuador.*
+# fi
 
 # # Ecuador - dictionary
 shp2json -n build/ecuador.shp \
@@ -34,13 +34,13 @@ geo2topo -q 1e5 -n level4=<( \
 > files/ecuador-tm-50k.json #transverse_mercator
   
 # Perú - download
-if [ ! -f build/peru.shp ]; then
-  curl -ko build/peru.zip 'https://www.idep.gob.pe/descargas_CN/limites/distritos.zip'
-  unzip build/peru.zip -d build/distritos DISTRITOS.shp DISTRITOS.dbf 
-  for file in build/distritos/DISTRITOS.*; do mv -- "$file" "${file/distritos\/DISTRITOS/peru}"; done
-  rm -rf build/distritos
-  chmod a-x build/peru.*
-fi
+# if [ ! -f build/peru.shp ]; then
+#   curl -ko build/peru.zip 'https://www.idep.gob.pe/descargas_CN/limites/distritos.zip'
+#   unzip build/peru.zip -d build/distritos DISTRITOS.shp DISTRITOS.dbf 
+#   for file in build/distritos/DISTRITOS.*; do mv -- "$file" "${file/distritos\/DISTRITOS/peru}"; done
+#   rm -rf build/distritos
+#   chmod a-x build/peru.*
+# fi
 
 # Perú - dictionary
 shp2json --encoding utf-8 -n build/peru.shp \
