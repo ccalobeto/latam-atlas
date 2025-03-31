@@ -24,7 +24,8 @@
   ],
   "scripts": {
     "prepublishOnly": "bash prepublish",
-    "postpublish": "git push && git push --tags"
+    "postpublish": "git push && git push --tags",
+    "extract": "bash extract_feature"
   },
   "devDependencies": {
     "d3-dsv": "3.0.1",

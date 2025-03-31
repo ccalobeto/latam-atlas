@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Perú - download
+# curl -ko build/peru.zip 'https://www.idep.gob.pe/descargas_CN/limites/distritos.zip'
+unzip build/peru.zip -d build/peru
+for file in build/peru/DISTRITOS.*; do mv -- "$file" "${file/peru\/DISTRITOS/peru}"; done
+rm -rf build/peru
+chmod a-x build/peru/peru.*
+
+
+# Extract Miraflores feature 
+ogr2ogr \
+  -f GeoJSON \
+  -where "UBIGEO IN ('150122')" \
+  files/miraflores.json \
+  build/peru.shp
