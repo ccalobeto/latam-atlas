@@ -82,6 +82,8 @@ To extract just one **geojson** feature (in this case Miraflores) just execute
 ```js
 npm run extract
 ```
+>[!WARNING]
+> The [official source](https://www.idep.gob.pe/descargas_CN/limites/distritos.zip) is broken now. Working on how to supply it.
 
 ### Inspiration
 
