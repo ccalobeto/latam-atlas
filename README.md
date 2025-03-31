@@ -77,6 +77,11 @@ Districts
 
 <img src="img/pe-districts.png" width="480" height="300">
 
+## Extract One feature
+To extract just one **geojson** feature (in this case Miraflores) just execute 
+```js
+npm run extract
+```
 
 ### Inspiration
 
